@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../constants.dart';
+
 class social_login_button extends StatelessWidget {
   Function clickEvent;
   String imageData;
@@ -9,9 +11,13 @@ class social_login_button extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: clickEvent,
-      child: CircleAvatar(
-        child: Image.asset(
-          imageData,
+      child: Card(
+        color: kAppMainLightColor,
+        elevation: 10,
+        child: CircleAvatar(
+          child: Image.asset(
+            imageData,
+          ),
         ),
       ),
     );

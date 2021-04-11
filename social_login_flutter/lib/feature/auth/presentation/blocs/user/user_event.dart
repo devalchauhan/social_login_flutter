@@ -32,3 +32,13 @@ class AuthSignInEvent extends UserEvent {
   @override
   List<Object> get props => [];
 }
+
+class FacebookSignInEvent extends UserEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class LinkedInSignInEvent extends UserEvent {
+  @override
+  List<Object> get props => [];
+}

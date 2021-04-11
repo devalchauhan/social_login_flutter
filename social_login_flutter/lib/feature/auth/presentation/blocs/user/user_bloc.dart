@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:social_login_flitter/core/usecases/usecase.dart';
 import 'package:social_login_flitter/feature/auth/data/models/auth_user_model.dart';
 import 'package:social_login_flitter/feature/auth/domain/entities/auth_user.dart';
+import 'package:social_login_flitter/feature/auth/domain/usecases/facebook_login.dart';
 import 'package:social_login_flitter/feature/auth/domain/usecases/get_current_user.dart';
+import 'package:social_login_flitter/feature/auth/domain/usecases/linkedin_login.dart';
 import 'package:social_login_flitter/feature/auth/domain/usecases/sign_in.dart';
 import 'package:social_login_flitter/feature/auth/domain/usecases/sign_out.dart';
 import 'package:social_login_flitter/feature/auth/domain/usecases/update_user.dart';
@@ -20,12 +23,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final SignIn signIn;
   final SignOut signOut;
   final UpdateUser updateUser;
+  final FBLogin fbLogin;
+  final LinkedInLogin linkedInLogin;
+  final FacebookLoginResult facebookLoginResult;
 
   UserBloc(
       {@required this.getCurrentUser,
       @required this.signIn,
       @required this.signOut,
-      @required this.updateUser})
+      @required this.updateUser,
+      @required this.fbLogin,
+      @required this.linkedInLogin,
+      @required this.facebookLoginResult})
       : super(UserNotLoggedState());
 
   @override
@@ -64,6 +73,33 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield updateUserFailedOrSuccess.fold(
         (l) => UserUpdateFailState(),
         (r) => UserUpdateSuccessState(),
+      );
+    }
+
+    if (event is SignInEvent) {
+      yield UserLoadingState();
+      final userSignInFailedOrSuccess = await signIn(NoParams());
+      yield userSignInFailedOrSuccess.fold(
+        (l) => UserNotLoggedState(),
+        (r) => UserLoggedState(user: r),
+      );
+    }
+
+    if (event is FacebookSignInEvent) {
+      yield UserLoadingState();
+      final userSignInFailedOrSuccess = await fbLogin(NoParams());
+      yield userSignInFailedOrSuccess.fold(
+        (l) => UserNotLoggedState(),
+        (r) => UserLoggedState(user: r),
+      );
+    }
+
+    if (event is LinkedInSignInEvent) {
+      yield UserLoadingState();
+      final userSignInFailedOrSuccess = await linkedInLogin(NoParams());
+      yield userSignInFailedOrSuccess.fold(
+        (l) => UserNotLoggedState(),
+        (r) => UserLoggedState(user: r),
       );
     }
   }

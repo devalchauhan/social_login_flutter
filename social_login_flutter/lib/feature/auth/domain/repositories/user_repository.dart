@@ -7,8 +7,6 @@ abstract class UserRepository {
   Future<Either<Failure, AuthUser>> signIn();
   Future<Either<Failure, AuthUser>> signOut();
   Future<Either<Failure, AuthUser>> updateUser(AuthUser authUser);
-  Future<Either<Failure, AuthUser>> facebookLogin();
-  Future<Either<Failure, AuthUser>> facebookLogout();
+  Future<Either<Failure, AuthUser>> fblogin();
   Future<Either<Failure, AuthUser>> linkedInLogin();
-  Future<Either<Failure, AuthUser>> linkedInLogout();
 }

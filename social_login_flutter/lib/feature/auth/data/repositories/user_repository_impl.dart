@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_login/src/models/login_data.dart';
 import 'package:social_login_flitter/core/error/exceptions/exceptions.dart';
 import 'package:social_login_flitter/core/error/failure/failures.dart';
 import 'package:social_login_flitter/feature/auth/data/datasources/user_remote_data_source.dart';
@@ -55,34 +54,9 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, AuthUser>> facebookLogin() {
-    // TODO: implement facebookLogin
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, AuthUser>> facebookLogout() {
-    // TODO: implement facebookLogout
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, AuthUser>> linkedInLogin() {
-    // TODO: implement linkedInLogin
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, AuthUser>> linkedInLogout() {
-    // TODO: implement linkedInLogout
-    throw UnimplementedError();
-  }
-
-  /* @override
-  Future<Either<Failure, AuthUser>> authLogin(LoginData data) async {
+  Future<Either<Failure, AuthUser>> fblogin() async {
     try {
-      final AuthUserModel _currentUser =
-          await userRemoteDataSource.authLogin(data);
+      final AuthUserModel _currentUser = await userRemoteDataSource.fblogin();
       return Right(_currentUser);
     } on AuthException {
       return Left(AuthFailure());
@@ -90,8 +64,13 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, AuthUser>> authSignup() {
-    // TODO: implement authSignup
-    throw UnimplementedError();
-  }*/
+  Future<Either<Failure, AuthUser>> linkedInLogin() async {
+    try {
+      final AuthUserModel _currentUser =
+          await userRemoteDataSource.linkedinLogin();
+      return Right(_currentUser);
+    } on AuthException {
+      return Left(AuthFailure());
+    }
+  }
 }

@@ -15,6 +15,9 @@ const kAppMainLightColor = Color(0xFFb7bcfb);
 
 const kMinLogoHeight = 100.0; // hide logo if less than this
 const kMaxLogoHeight = 125.0;
+const String redirectUrl = 'https://www.linkedin.com/';
+const String clientId = '78bkp1phkt1oay';
+const String clientSecret = 'MLxZLe0IFqnf4MDR';
 
 /// Alert
 const String kAlertTitle = 'Alert';

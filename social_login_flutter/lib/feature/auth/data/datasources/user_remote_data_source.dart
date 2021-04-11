@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_login_flitter/core/error/exceptions/exceptions.dart';
@@ -24,6 +25,9 @@ abstract class UserRemoteDataSource {
   Future<AuthUserModel> updateUser(AuthUserModel authUser);
 
   Future<AuthUserModel> authLogin(LoginData data);
+
+  Future<AuthUserModel> fblogin();
+  Future<AuthUserModel> linkedinLogin();
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -31,12 +35,16 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   final FirebaseAuth firebaseAuth;
   final GoogleSignIn googleSignIn;
+  final FacebookLogin fbLogin;
   final FirebaseFirestore firebaseFirestore;
+  final FacebookLoginResult facebookLoginResult;
 
   UserRemoteDataSourceImpl(
       {@required this.firebaseAuth,
       @required this.googleSignIn,
-      @required this.firebaseFirestore});
+      @required this.firebaseFirestore,
+      @required this.fbLogin,
+      @required this.facebookLoginResult});
 
   @override
   Future<AuthUserModel> getCurrentUser() async {
@@ -153,4 +161,47 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       throw DataBaseException();
     }
   }
+
+  @override
+  Future<AuthUserModel> fblogin() async {
+    final FacebookLoginResult result = await fbLogin.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final FacebookAccessToken accessToken = result.accessToken;
+        final AuthCredential credential =
+            FacebookAuthProvider.credential(accessToken.token);
+        final UserCredential authResult =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        if (authResult.user != null) {
+          AuthUserModel _userModel = AuthUserModel(
+              email: authResult.user.email,
+              displayName: authResult.user.displayName,
+              profileImage: authResult.user.photoURL,
+              userId: authResult.user.uid,
+              address: "",
+              dob: DateTime.now().toUtc().millisecondsSinceEpoch,
+              gender: GenderType.MALE,
+              mobile: 0);
+
+          DocumentSnapshot userDocumentSnapshot = await firebaseFirestore
+              .collection(USERS_COLLECTION_NAME)
+              .doc(authResult.user.uid)
+              .get();
+          if (!userDocumentSnapshot.exists) {
+            firebaseFirestore
+                .collection(USERS_COLLECTION_NAME)
+                .doc(authResult.user.uid)
+                .set(_userModel.toJson());
+          }
+          return Future.value(
+            _userModel,
+          );
+        } else {
+          throw AuthException();
+        }
+    }
+  }
+
+  @override
+  Future<AuthUserModel> linkedinLogin() {}
 }

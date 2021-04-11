@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'package:social_login_flitter/feature/auth/domain/usecases/facebook_login.dart';
+import 'package:social_login_flitter/feature/auth/domain/usecases/linkedin_login.dart';
 import 'package:social_login_flitter/feature/auth/domain/usecases/sign_in.dart';
 import 'package:social_login_flitter/feature/auth/domain/usecases/sign_out.dart';
 import 'package:social_login_flitter/feature/auth/presentation/blocs/user/user_bloc.dart';
@@ -18,12 +21,18 @@ final sl = GetIt.instance;
 Future<void> init() async {
   //! Features - Number Trivia
   // Bloc
-  sl.registerFactory(
-    () => UserBloc(
-        getCurrentUser: sl(), signIn: sl(), signOut: sl(), updateUser: sl()),
-  );
+  sl.registerFactory(() => UserBloc(
+        getCurrentUser: sl(),
+        signIn: sl(),
+        signOut: sl(),
+        updateUser: sl(),
+        fbLogin: sl(),
+        linkedInLogin: sl(),
+      ));
 
   // Use cases
+  sl.registerLazySingleton(() => FBLogin(userRepository: sl()));
+  sl.registerLazySingleton(() => LinkedInLogin(userRepository: sl()));
   sl.registerLazySingleton(() => GetCurrentUser(userRepository: sl()));
   sl.registerLazySingleton(() => SignIn(userRepository: sl()));
   sl.registerLazySingleton(() => SignOut(userRepository: sl()));
@@ -40,5 +49,6 @@ Future<void> init() async {
 
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   sl.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
+  sl.registerLazySingleton<FacebookLogin>(() => FacebookLogin());
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
 }
