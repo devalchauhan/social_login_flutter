@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:social_login_flitter/feature/auth/presentation/pages/auth_page.dart';
+import 'package:social_login_flitter/feature/auth/presentation/pages/profile_page.dart';
 import 'helper/appMainColor.dart';
-import 'screens/home.dart';
-import 'screens/login.dart';
 
 class App extends StatelessWidget {
   @override
@@ -16,10 +16,10 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: AppMainMaterialColor().colorCustom,
       ),
-      initialRoute: Login.id,
+      initialRoute: AuthPage.id,
       routes: {
-        Login.id: (context) => Login(),
-        Home.id: (context) => Home(),
+        AuthPage.id: (context) => AuthPage(),
+        ProfilePage.id: (context) => ProfilePage(),
       },
     );
   }

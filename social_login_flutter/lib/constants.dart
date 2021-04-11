@@ -10,6 +10,8 @@ const kDebugToolbarKey = const Key('DEBUG_TOOLBAR');
 
 const kAppMainColor_String = '0xFF6E78F7';
 const kAppMainColor = Color(0xFF6E78F7);
+const kAppMainLightColor_string = '0xFFb7bcfb';
+const kAppMainLightColor = Color(0xFFb7bcfb);
 
 const kMinLogoHeight = 100.0; // hide logo if less than this
 const kMaxLogoHeight = 125.0;

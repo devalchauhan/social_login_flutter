@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class AppMainMaterialColor {
-  MaterialColor colorCustom =
-      MaterialColor(Color(int.tryParse(kAppMainColor_String)).value, {
+  MaterialColor colorCustom = MaterialColor(kAppMainColor.value, {
     50: Color.fromRGBO(110, 120, 247, .1),
     100: Color.fromRGBO(110, 120, 247, .2),
     200: Color.fromRGBO(110, 120, 247, .3),
