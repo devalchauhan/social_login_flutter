@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:737788694460:android:72ec7324b092c0250ea5b9",
+        "mobilesdk_app_id": "1:737788694460:android:07eb8c68a0ae5bc50ea5b9",
         "android_client_info": {
-          "package_name": "com.devalchauhan.socialLoginFlutter"
+          "package_name": "com.devalchauhan.social_login_flutter"
         }
       },
       "oauth_client": [
